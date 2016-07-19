@@ -17,9 +17,9 @@ public class FieldTest {
     Point pointForRandom = new Point(0, 0);
     Point point = new Point(0, 0);
     int value;
+
     @Before
     public void initialize() {
-        field = new FieldModel(4, 4);
         field = new FieldModel(4, 4) {
             @Override
             public Point generateRandomCoordinates() {
@@ -34,14 +34,12 @@ public class FieldTest {
         };
     }
 
-
-
-    @org.junit.Test
+    @Test
     public void testForGeneratingNewCell() throws Exception {
         field.addCellToField();
         assertThat(field.getCells().size(), is(1));
     }
-    
+
 
     @Test
     public void testForGeneratingTwoCellsWithDifferentCoordinates() {
@@ -63,5 +61,4 @@ public class FieldTest {
         assertThat(field.getCells().get(0).getValue() == 2 && field.getCells().get(1).getValue() == 4 &&
                 field.getCells().get(2).getValue() == 2, is(true));
     }
-
 }
