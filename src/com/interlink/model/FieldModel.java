@@ -26,12 +26,13 @@ public class FieldModel implements RandomGenerator {
 
     }
 
+
     private Point getCellCoordinate() {
         Point coordinate = null;
         boolean isAdded = false;
         while (!isAdded) {
             coordinate = generateRandomCoordinates();
-            if (checkIfCoordinateIsFree(coordinate)) {
+            if (isEmpty(coordinate)) {
                 isAdded = true;
             }
         }
@@ -47,14 +48,16 @@ public class FieldModel implements RandomGenerator {
         return cells;
     }
 
-    private boolean checkIfCoordinateIsFree(Point point) {
+    private boolean isEmpty(Point point) {
         boolean result = true;
-        for (Cell cell : cells) {
-            if (point.equals(cell.getCoordinate()))
+        for (Cell cell : getCells()) {
+            if (point.equals(cell.getCoordinate())) {
                 result = false;
+            }
         }
         return result;
     }
+
 
     @Override
     public Point generateRandomCoordinates() {
@@ -66,4 +69,6 @@ public class FieldModel implements RandomGenerator {
     public int generateRandomValue() {
         return 0;
     }
+
+
 }

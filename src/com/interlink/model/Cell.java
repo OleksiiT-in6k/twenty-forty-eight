@@ -19,20 +19,8 @@ public class Cell {
         return coordinate;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Cell cell = (Cell) o;
-
-        return coordinate != null ? coordinate.equals(cell.coordinate) : cell.coordinate == null;
-
+    public int getValue() {
+        return value;
     }
 
-    @Override
-    public int hashCode() {
-        return coordinate != null ? coordinate.hashCode() : 0;
-    }
 }
