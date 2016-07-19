@@ -1,5 +1,6 @@
 package com.interlink.model;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,9 @@ public class FieldModel {
     }
 
     public void generateRandomCell() {
-        cells.add(new Cell());
+        cells.add(new Cell(new Point()));
     }
+
 
     public List<Cell> getCells() {
         return cells;
