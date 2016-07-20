@@ -1,12 +1,13 @@
 package com.interlink.model;
 
-import java.awt.*;
+
+import java.util.List;
 
 /**
  * Created by employee on 7/19/16.
  */
 public interface RandomGenerator {
-    Point generateRandomCoordinates();
+    Cell selectCell(List<Cell> cells);
 
-    int generateRandomValue();
+    int generateValue();
 }

@@ -27,6 +27,10 @@ public class Cell {
         return value;
     }
 
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public void translateX(int x) {
         coordinate.translate(x, (int) coordinate.getY());
     }

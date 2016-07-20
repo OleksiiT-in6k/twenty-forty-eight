@@ -4,7 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.interlink.model.Direction.UP;
+import static com.interlink.model.Direction.*;
+
 
 /**
  * Created by employee on 7/19/16.
@@ -29,10 +30,9 @@ public class FieldModel implements RandomGenerator, MoveAction {
     }
 
     public void addCellToField() {
-        Point coordinate = getCellCoordinate();
-        int value = getCellValue();
-        cells.add(new Cell(value, coordinate));
-
+        Cell cell = selectCell(getListWithEmptyCells());
+        cell.setValue(getCellValue());
+        cells.add(cell);
     }
 
     @Override
@@ -54,11 +54,36 @@ public class FieldModel implements RandomGenerator, MoveAction {
 
     @Override
     public void moveDown() {
-
+        Direction direction = DOWN;
+        for (int x = 0; x < xSize; x++) {
+            boolean availableToMove = true;
+            while (availableToMove) {
+                availableToMove = false;
+                for (Cell cell : getCellsFromColumnCoordinate(x)) {
+                    if (isEmpty(getCoordinateForDirection(cell, direction))) {
+                        availableToMove = true;
+                        cell.setCoordinate(getCoordinateForDirection(cell, direction));
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void moveRight() {
+        Direction direction = RIGHT;
+        for (int y = 0; y < ySize; y++) {
+            boolean availableToMove = true;
+            while (availableToMove) {
+                availableToMove = false;
+                for (Cell cell : getCellsFromRowCoordinate(y)) {
+                    if (isEmpty(getCoordinateForDirection(cell, direction))) {
+                        availableToMove = true;
+                        cell.setCoordinate(getCoordinateForDirection(cell, direction));
+                    }
+                }
+            }
+        }
 
     }
 
@@ -100,6 +125,7 @@ public class FieldModel implements RandomGenerator, MoveAction {
         return cells;
     }
 
+
     private List<Cell> getCellsFromColumnCoordinate(int x) {
         List<Cell> cells = new ArrayList<>();
         for (Cell cell : this.cells) {
@@ -109,21 +135,19 @@ public class FieldModel implements RandomGenerator, MoveAction {
         return cells;
     }
 
-
-    private Point getCellCoordinate() {
-        Point coordinate = null;
-        boolean isAdded = false;
-        while (!isAdded) {
-            coordinate = generateRandomCoordinates();
-            if (isEmpty(coordinate)) {
-                isAdded = true;
-            }
-        }
-        return coordinate;
+    private List<Cell> getListWithEmptyCells() {
+        List<Cell> result = new ArrayList<>();
+        for (int x = 0; x < xSize; x++)
+            for (int y = 0; y < ySize; y++)
+                if (isEmpty(new Point(x, y))) {
+                    result.add(new Cell(0, new Point(x, y)));
+                }
+        return result;
     }
 
+
     private int getCellValue() {
-        return generateRandomValue();
+        return generateValue();
     }
 
 
@@ -147,15 +171,15 @@ public class FieldModel implements RandomGenerator, MoveAction {
 
 
     @Override
-    public Point generateRandomCoordinates() {
-        Point point = new Point((int) (Math.random() * xSize), (int) (Math.random() * ySize));
-        return point;
+    public Cell selectCell(List<Cell> emptyCells) {
+        int index = (int) (Math.random() * (emptyCells.size()));
+        return emptyCells.get(index);
     }
+
 
     @Override
-    public int generateRandomValue() {
+    public int generateValue() {
         return 0;
     }
-
 
 }

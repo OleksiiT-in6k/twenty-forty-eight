@@ -46,5 +46,15 @@ public class TestForMove {
         assertThat(fieldModel.getCells(), is(expectedCells));
     }
 
+    @Test
+    public void testForMoveRight() throws Exception {
+        fieldModel.moveRight();
+        List expectedCells = new ArrayList();
+        expectedCells.add(new Cell(2, new Point(3, 1)));
+        expectedCells.add(new Cell(4, new Point(2, 2)));
+        expectedCells.add(new Cell(8, new Point(3, 2)));
+        assertThat(fieldModel.getCells(), is(expectedCells));
+    }
+
 
 }
