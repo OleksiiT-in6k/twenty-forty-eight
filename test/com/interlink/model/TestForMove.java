@@ -3,12 +3,8 @@ package com.interlink.model;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
  * Created by employee on 7/19/16.
@@ -18,43 +14,60 @@ public class TestForMove {
 
     @Before
     public void initialize() {
-        List<Cell> cells = new ArrayList<>();
-        cells.add(new Cell(2, new Point(1, 1)));
-        cells.add(new Cell(4, new Point(1, 2)));
-        cells.add(new Cell(8, new Point(2, 2)));
-        fieldModel = new FieldModel(4, 4, cells);
+        fieldModel = new FieldModel(4, 4,
+                "0 0 0 0\n" +
+                        "0 2 0 0\n" +
+                        "0 4 8 0\n" +
+                        "0 0 0 0"
+        );
     }
 
     @Test
     public void testForMoveUp() throws Exception {
         fieldModel.moveUp();
-        List expectedCells = new ArrayList();
-        expectedCells.add(new Cell(2, new Point(1, 0)));
-        expectedCells.add(new Cell(4, new Point(1, 1)));
-        expectedCells.add(new Cell(8, new Point(2, 0)));
-        assertThat(fieldModel.getCells(), is(expectedCells));
+        FieldModel expectedField = new FieldModel(4, 4,
+                "0 2 8 0\n" +
+                        "0 4 0 0\n" +
+                        "0 0 0 0\n" +
+                        "0 0 0 0"
+        );
 
+        assertThat(fieldModel.getCells(), containsInAnyOrder(expectedField.getCells().toArray()));
     }
 
     @Test
     public void testForMoveDown() throws Exception {
         fieldModel.moveDown();
-        List expectedCells = new ArrayList();
-        expectedCells.add(new Cell(2, new Point(1, 2)));
-        expectedCells.add(new Cell(4, new Point(1, 3)));
-        expectedCells.add(new Cell(8, new Point(2, 3)));
-        assertThat(fieldModel.getCells(), is(expectedCells));
+        FieldModel expectedField = new FieldModel(4, 4,
+                "0 0 0 0\n" +
+                        "0 0 0 0\n" +
+                        "0 2 0 0\n" +
+                        "0 4 8 0"
+        );
+        assertThat(fieldModel.getCells(), containsInAnyOrder(expectedField.getCells().toArray()));
     }
 
     @Test
     public void testForMoveRight() throws Exception {
         fieldModel.moveRight();
-        List expectedCells = new ArrayList();
-        expectedCells.add(new Cell(2, new Point(3, 1)));
-        expectedCells.add(new Cell(4, new Point(2, 2)));
-        expectedCells.add(new Cell(8, new Point(3, 2)));
-        assertThat(fieldModel.getCells(), is(expectedCells));
+        FieldModel expectedField = new FieldModel(4, 4,
+                "0 0 0 0\n" +
+                        "0 0 0 2\n" +
+                        "0 0 4 8\n" +
+                        "0 0 0 0"
+        );
+        assertThat(fieldModel.getCells(), containsInAnyOrder(expectedField.getCells().toArray()));
     }
 
-
+    @Test
+    public void testForMoveLeft() throws Exception {
+        fieldModel.moveLeft();
+        FieldModel expectedField = new FieldModel(4, 4,
+                "0 0 0 0\n" +
+                        "2 0 0 0\n" +
+                        "4 8 0 0\n" +
+                        "0 0 0 0"
+        );
+        assertThat(fieldModel.getCells(), containsInAnyOrder(expectedField.getCells().toArray()));
+    }
 }

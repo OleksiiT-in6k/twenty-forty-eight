@@ -1,6 +1,5 @@
 package com.interlink.model;
 
-import java.awt.*;
 
 /**
  * Created by employee on 7/19/16.
@@ -31,17 +30,7 @@ public class Cell {
         this.value = value;
     }
 
-    public void translateX(int x) {
-        coordinate.translate(x, (int) coordinate.getY());
-    }
 
-    public void translateY(int y) {
-        coordinate.translate((int) coordinate.getX(), y);
-    }
-
-    public void translate(int x, int y) {
-        coordinate.translate(x, y);
-    }
 
 
     @Override

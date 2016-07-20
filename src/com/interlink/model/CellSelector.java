@@ -1,13 +1,10 @@
 package com.interlink.model;
 
-
 import java.util.List;
 
 /**
- * Created by employee on 7/19/16.
+ * Created by employee on 7/20/16.
  */
-public interface RandomGenerator {
+public interface CellSelector {
     Cell selectCell(List<Cell> cells);
-
-    int generateValue();
 }

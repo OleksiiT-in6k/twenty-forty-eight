@@ -1,6 +1,5 @@
 package com.interlink.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +9,30 @@ import static com.interlink.model.Direction.*;
 /**
  * Created by employee on 7/19/16.
  */
-public class FieldModel implements RandomGenerator, MoveAction {
+public class FieldModel implements MoveAble {
 
-    List<Cell> cells;
-    int xSize;
-    int ySize;
+    private List<Cell> cells;
+    private int xSize;
+    private int ySize;
+    private ValueGenerator valueGenerator;
+    private CellSelector cellSelector;
 
     FieldModel(int xSize, int ySize) {
         cells = new ArrayList<>();
         this.xSize = xSize;
         this.ySize = ySize;
+    }
+
+    FieldModel(int xSize, int ySize, String cellEnumeration) {
+        this(xSize, ySize);
+        for (int y = 0; y < cellEnumeration.split("\n").length; y++) {
+            String cellRow = cellEnumeration.split("\n")[y];
+            for (int x = 0; x < cellRow.split(" ").length; x++) {
+                int value = Integer.parseInt(cellRow.split(" ")[x]);
+                if (value != 0)
+                    cells.add(new Cell(value, new Point(x, y)));
+            }
+        }
     }
 
 
@@ -30,7 +43,7 @@ public class FieldModel implements RandomGenerator, MoveAction {
     }
 
     public void addCellToField() {
-        Cell cell = selectCell(getListWithEmptyCells());
+        Cell cell = cellSelector.selectCell(getListWithEmptyCells());
         cell.setValue(getCellValue());
         cells.add(cell);
     }
@@ -89,27 +102,47 @@ public class FieldModel implements RandomGenerator, MoveAction {
 
     @Override
     public void moveLeft() {
+        Direction direction = LEFT;
+        for (int y = 0; y < ySize; y++) {
+            boolean availableToMove = true;
+            while (availableToMove) {
+                availableToMove = false;
+                for (Cell cell : getCellsFromRowCoordinate(y)) {
+                    if (isEmpty(getCoordinateForDirection(cell, direction))) {
+                        availableToMove = true;
+                        cell.setCoordinate(getCoordinateForDirection(cell, direction));
+                    }
+                }
+            }
+        }
 
     }
 
+    public void setValueGenerator(ValueGenerator valueGenerator) {
+        this.valueGenerator = valueGenerator;
+    }
+
+    public void setCellSelector(CellSelector cellSelector) {
+        this.cellSelector = cellSelector;
+    }
 
     private Point getCoordinateForDirection(Cell cell, Direction direction) {
         Point result = null;
         switch (direction) {
             case UP: {
-                result = new Point((int) cell.getCoordinate().getX(), (int) cell.getCoordinate().getY() - 1);
+                result = new Point(cell.getCoordinate().getX(), cell.getCoordinate().getY() - 1);
                 break;
             }
             case DOWN: {
-                result = new Point((int) cell.getCoordinate().getX(), (int) cell.getCoordinate().getY() + 1);
+                result = new Point(cell.getCoordinate().getX(), cell.getCoordinate().getY() + 1);
                 break;
             }
             case RIGHT: {
-                result = new Point((int) cell.getCoordinate().getX(), (int) cell.getCoordinate().getY() + 1);
+                result = new Point(cell.getCoordinate().getX() + 1, cell.getCoordinate().getY());
                 break;
             }
             case LEFT: {
-                result = new Point((int) cell.getCoordinate().getX(), (int) cell.getCoordinate().getY() - 1);
+                result = new Point(cell.getCoordinate().getX() - 1, cell.getCoordinate().getY());
                 break;
             }
         }
@@ -147,7 +180,7 @@ public class FieldModel implements RandomGenerator, MoveAction {
 
 
     private int getCellValue() {
-        return generateValue();
+        return valueGenerator.generateValue();
     }
 
 
@@ -168,18 +201,4 @@ public class FieldModel implements RandomGenerator, MoveAction {
         }
         return result;
     }
-
-
-    @Override
-    public Cell selectCell(List<Cell> emptyCells) {
-        int index = (int) (Math.random() * (emptyCells.size()));
-        return emptyCells.get(index);
-    }
-
-
-    @Override
-    public int generateValue() {
-        return 0;
-    }
-
 }

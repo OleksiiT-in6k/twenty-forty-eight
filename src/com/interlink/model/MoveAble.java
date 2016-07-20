@@ -3,7 +3,7 @@ package com.interlink.model;
 /**
  * Created by employee on 7/19/16.
  */
-public interface MoveAction {
+public interface MoveAble {
     void moveUp();
 
     void moveDown();
